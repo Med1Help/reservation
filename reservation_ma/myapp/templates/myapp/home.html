@@ -1,0 +1,65 @@
+{% extends 'main.html' %}
+{% block content %}
+      <!-- coffee section start -->
+      <div class="coffee_section layout_padding">
+         <div class="container">
+            <div class="row">
+               <h1 class="coffee_taital">OUR Events</h1>
+            </div>
+         </div>
+         <div class="coffee_section_2">
+            <div id="main_slider" class="carousel slide" data-ride="carousel">
+               <div class="carousel-inner">
+                  <div class="carousel-item active">
+                     <div class="container-fluid">
+                        <div class="row">
+                           {% for event in events %}
+                           <div class="col-lg-3 col-md-6">
+                              <div class="coffee_img"><img src="{{event.magniture.url}}"></div>
+                              <h3 class="types_text">{{event.title}}</h3>
+                              <ul>
+                              <li class="looking_text">{{event.place}}</li>
+                              <li class="looking_text">{{event.date}}</li>
+                              <li class="looking_text">{{event.time}}</li>
+                              {%for tick in tickets%}
+                                 {% if tick.event == event %}
+                              <li class="looking_text">{{tick.ticketDispo}} &nbsp; {{tick.ticketType}} &nbsp; {{tick.price}}</li>
+                                 {% endif %}
+                              {% endfor %}
+                              </ul>
+                              <div class="read_bt"><a href="{% url 'ticket-form' %}?ev={{event.title}}">Get Ticket</a></div>
+                           </div>
+                           {% endfor %}
+                        </div>
+                     </div>
+                  </div>
+                  <div class="carousel-item">
+                     <div class="container-fluid">
+                        <div class="row">
+                           {% for event in events %}
+                           <div class="col-lg-3 col-md-6">
+                              <div class="coffee_img"><img src="{{event.magniture.url}}"></div>
+                              <h3 class="types_text">{{event.title}}</h3>
+                              <ul>
+                              <li class="looking_text">{{event.place}}</li>
+                              <li class="looking_text">{{event.date}}</li>
+                              <li class="looking_text">{{event.time}}</li>
+                              </ul>
+                              <div class="read_bt"><a href="#">Get Ticket</a></div>
+                           </div>
+                           {% endfor %}
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <a class="carousel-control-prev" href="#main_slider" role="button" data-slide="prev">
+               <i class="fa fa-arrow-left"></i>
+               </a>
+               <a class="carousel-control-next" href="#main_slider" role="button" data-slide="next">
+               <i class="fa fa-arrow-right"></i>
+               </a>
+            </div>
+         </div>
+      </div>
+      <!-- coffee section end -->
+{% endblock %}      

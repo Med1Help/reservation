@@ -1,0 +1,20 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<div>
+    <form method="POST" action="/test">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Client name" >
+        <input type="text" name="email" placeholder="Client email" >
+        <input type="text" name="cardNumber" placeholder="Card Number" >
+        <input type="text" name="cvv" placeholder="Card cvv" >
+        <input type="text" name="exp" placeholder="Card exp" >
+        <input type="text" name="ev" value="Agadir event" hidden>
+        <input type="text" name="tck" value="ordinary" hidden>
+        <input type="text" name="n" value="10" hidden>
+        <input type="submit">
+
+    </form>
+</div>
+
+{% endblock %}

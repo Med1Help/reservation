@@ -1,0 +1,30 @@
+{% extends 'main.html' %}
+{% block content %}
+<div class="container">    
+     <!-- start header here-->
+	<header>
+    <div id="fdw-pricing-table">
+        {% for event in events %}
+        <div class="plan plan1">
+            <div class="header"><img src="{{event.magniture.url}}"></div>
+            {%for tick in tickets%}
+            {% if tick.event == event %}
+            <div class="price">{{tick.price}}</div> 
+            <div class="monthly">{{tick.ticketDispo}} &nbsp; {{tick.ticketType}} &nbsp; </div>  
+            {% endif %}
+            {% endfor %}
+            <ul>
+                <li><b>Owner</b> {{event.owner.name}}</li>
+                <li><b>Date</b>{{event.date}}</li>
+                <li><b>Time</b>{{event.time}}</li>
+                <li><b>Place</b>{{event.place}}</li>			
+            </ul>
+            <a class="signup" href="{% url 'event-update' event.owner.id event.id %}">edit</a>         
+            <a class="signup" href="{% url 'event-delete' event.owner.id event.id %}">delete</a>         
+        </div>
+        {% endfor %}	
+    </div>
+	</header><!-- end header -->
+    
+</div>
+{% endblock %}

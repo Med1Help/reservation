@@ -1,0 +1,44 @@
+{% extends 'main.html' %}
+{% block content %}
+    {% if request.user.role == 'admin' %}
+    <h1>Managers</h1>
+    <a class="btn btn--main" href="{% url 'manager-form' %}">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+          <title>add</title>
+          <path
+            d="M16.943 0.943h-1.885v14.115h-14.115v1.885h14.115v14.115h1.885v-14.115h14.115v-1.885h-14.115v-14.115z"
+          ></path>
+        </svg>
+        Add Manager
+      </a>
+    <div class="roomList">
+    {% for manager in managers %}
+    <div class="roomListRoom">
+        <div class="roomListRoom__header">
+          <a href="#" class="roomListRoom__author">
+            <div class="avatar avatar--small active">
+              <img src="https://randomuser.me/api/portraits/men/11.jpg" />
+            </div>
+            <span>{{manager.name}}</span>
+          </a>
+          <div class="roomListRoom__actions">
+            <span>{{manager.role}}</span>
+          </div>
+        </div>
+        <div class="roomListRoom__content">
+          E-mail : {{manager.email}}
+        </div>
+        <div class="roomListRoom__content">
+          Num : {{manager.num}}
+        </div>
+        <div class="roomListRoom__meta">
+          <a href="{% url 'manager_update-form' manager.id %}"><p class="roomListRoom__topic">Edit</p></a>
+          <a href="{% url 'manager-delete' manager.id %}"><p class="roomListRoom__topic">Delete</p></a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <hr>
+    {% include 'myapp/events_dash.html' %}
+{% endblock %}

@@ -1,0 +1,58 @@
+{% load static %}
+
+<div class="header_section header_bg">
+    <div class="container-fluid">
+       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand"href="{% url 'home' %}"><div style="background-color: rgb(16, 15, 15); color: rgb(227, 68, 0);">&nbsp;&nbsp;MED <span style="color: aliceblue;">RMIOUI&nbsp;&nbsp;</span></div></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+             <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                   <a class="nav-link" href="index.html"></a>
+                </li>
+                <li class="nav-item active">
+                   <a class="nav-link" href="about.html"></a>
+                </li>
+                <li class="nav-item">
+                   <a class="nav-link" href="coffees.html"></a>
+                </li>
+                <li class="nav-item">
+                   <a class="nav-link" href="shop.html"></a>
+                </li>
+                <li class="nav-item">
+                   <a class="nav-link" href="blog.html"></a>
+                </li>
+                <li class="nav-item">
+                   <a class="nav-link" href="contact.html"></a>
+                </li>
+             </ul>
+             <form class="form-inline my-2 my-lg-0">
+                <div class="login_bt">
+                   <ul>
+                      <li>
+                        {% if request.user.is_authenticated %}
+                        <a href="/user-logout"><span class="user_icon"><i class="fa fa-user" aria-hidden="true"></i></span> &nbsp; &nbsp; Logout &nbsp; &nbsp;</a>
+                        {% else %}
+                        <a href="user-login"><span class="user_icon"><i class="fa fa-user" aria-hidden="true"></i></span> &nbsp; &nbsp; Login &nbsp; &nbsp;</a>
+                        {% endif %}
+                        <form class="header__search" action=" {% url 'home' %} " method="GET">
+                           <label>
+                             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                               <title>search</title>
+                               <path
+                                 d="M32 30.586l-10.845-10.845c1.771-2.092 2.845-4.791 2.845-7.741 0-6.617-5.383-12-12-12s-12 5.383-12 12c0 6.617 5.383 12 12 12 2.949 0 5.649-1.074 7.741-2.845l10.845 10.845 1.414-1.414zM12 22c-5.514 0-10-4.486-10-10s4.486-10 10-10c5.514 0 10 4.486 10 10s-4.486 10-10 10z"
+                               ></path>
+                             </svg>
+                             <input type="text" name="q" placeholder="Search By Topics..." />
+                           </label>
+                         </form>
+                   </ul>
+                </div>
+             </form>
+          </div>
+       </nav>
+    </div>
+ </div>
+
