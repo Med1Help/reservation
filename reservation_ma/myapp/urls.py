@@ -17,4 +17,7 @@ urlpatterns = [
     path('event-delete/<str:idManager>/<str:idEvent>',views.deleteEvent,name='event-delete'),
     path('user-login',views.userLogin,name='user-login'),
     path('user-logout',views.userLogout,name='user-logout'),
+    path('dashboard',views.dashbord,name='dashboard'),
+    path('ticketref/<str:idManager>/<str:idEvent>',views.addTicketRef_form,name='ticketref')
+
 ]

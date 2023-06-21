@@ -1,11 +1,12 @@
 from django.shortcuts import render , redirect
 from .models import Event , TicketRef , Ticket , Client , Order , User
-from .forms import UserForm, EventForm
+from .forms import TicketRefForm, UserForm, EventForm
 from django.db.models import Q
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required 
+from django.template.defaulttags import register
 
 def home(req):
     q = req.GET.get('q')
@@ -19,11 +20,24 @@ def home(req):
     context   = {'events':events,'tickets':ticketRef}
     return render(req,'myapp/home.html',context)
 
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
 @login_required(login_url='user-login')
 def events(req,idManager):
     events    = Event.objects.filter(owner_id=idManager)
     ticketRef = TicketRef.objects.all()
-    context   = {'events':events,'tickets':ticketRef}
+    tickets   = {}
+    for event in events:
+        for ticket in ticketRef:
+            if (ticket.event == event):
+                if event.id in tickets:
+                    tickets[event.id].append(ticket)
+                else:
+                    tickets[event.id] = [ticket]  
+    print("tickets length ",tickets)
+    context   = {'events':events,'tickets':tickets}
     return render(req,'myapp/events_dash.html',context)
 
 @login_required(login_url='user-login')
@@ -37,11 +51,28 @@ def addEvent_form(req,idManager):
             event.owner = manager
             print(event,manager)
             event.save()
-            return redirect('event-dash',idManager)  
+            return redirect('ticketref',idManager,event.id)  
         else:
             print("what is wrong ??? ",form)    
     context = {'form' : form}
     return render(req,'myapp/event_form.html',context)
+
+#TicketRefForm
+@login_required(login_url='user-login')
+def addTicketRef_form(req,idManager,idEvent):
+    form = TicketRefForm()
+    if req.method == 'POST':
+        form = TicketRefForm(req.POST)
+        if form.is_valid():
+            ticketRef       = form.save(commit=False)
+            ticketRef.event = Event.objects.get(id=idEvent)
+            ticketRef.save()
+            return redirect('event-dash',idManager)  
+        else:
+            print("what is wrong ??? ",form)    
+    context = {'form' : form , 'idEvent':idEvent}
+    return render(req,'myapp/TicketRef_form.html',context)
+
 
 @login_required(login_url='user-login')
 def updateEvent(req,idEvent,idManager):
@@ -74,8 +105,16 @@ def managers(req):
         events    = Event.objects.all()
         managers = User.objects.all()
         events    = Event.objects.all()
-
-    context  = {'managers' : managers,'events':events,'tickets':ticketRef}
+    tickets   = {}
+    for event in events:
+        for ticket in ticketRef:
+            if (ticket.event == event):
+                if event.id in tickets:
+                    tickets[event.id].append(ticket)
+                else:
+                    tickets[event.id] = [ticket]  
+    print("tickets length managers",tickets)
+    context  = {'managers' : managers,'events':events,'tickets':tickets}
     return render(req,'myapp/managers_dash.html',context)
 
 @login_required(login_url='user-login')
@@ -111,8 +150,15 @@ def updateManager(req,idManager):
 def deleteManager(req,idManager):
     manager = User.objects.get(id=idManager)
     manager.delete()
-    return redirect('managers-dash')       
+    return redirect('managers-dash') 
 
+@login_required(login_url='user-login')     
+def dashbord(req):
+    print("user role : ",req.user.role)
+    if(req.user.role == 'manager'):
+      return redirect('event-dash',req.user.id) 
+    if(req.user.role == 'admin'):
+      return redirect('managers-dash')    
 
 def ticketForm(req):
     event   = req.GET.get('ev')
@@ -173,7 +219,7 @@ def verifying_ticket_dispo (eventTitle,tickType,number):
 def order_validation(req):
     return render(req,'myapp/client_form.html')
 
-@login_required(login_url='user-login')
+
 def userLogin(req):
     context = {}
     if req.method == 'POST':
